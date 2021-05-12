@@ -12,8 +12,6 @@ float cerceveSuresi = 1.0f / 60.0f;
 
 int main()
 {
-    
-   
     game_manager* game_managerG = new game_manager();
 
     sf::RectangleShape rectShape({ 400, 50 });
@@ -69,6 +67,8 @@ int main()
                    
             }
 
+            game_managerG->spawner();
+            game_managerG->mover();
 
             game_managerG->playerC->animController();
             game_managerG->playerC->bullets_move();
@@ -85,6 +85,16 @@ int main()
             for (int i = 0; i < game_managerG->playerC->bullets.size(); i++)
             {
                 window.draw(game_managerG->playerC->bullets[i]);
+            }
+            for (int i = 0; i < game_managerG->hostilesH->spider_ships.size(); i++)
+            {
+                window.draw(game_managerG->hostilesH->spider_ships[i]->spider_ship);
+            }
+            for (int i = 0; i < game_managerG->hostilesH->spider_ships.size(); i++)
+            {
+                for(int j = 0; j< game_managerG->hostilesH->spider_ships[i]->bullets.size();j++)
+                    if(game_managerG->hostilesH->spider_ships[i]->bullets[j].getPosition().y > game_managerG->hostilesH->spider_ships[i]->spider_ship.getPosition().y+10)
+                        window.draw(game_managerG->hostilesH->spider_ships[i]->bullets[j]);
             }
             window.display();
             gecenSure -= gecenSure;
