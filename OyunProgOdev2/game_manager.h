@@ -24,13 +24,29 @@ public:
 	{
 		hostilesH->move_spider_ships(playerC->player_sprite.getPosition().x);
 		hostilesH->move_spider_ship_bullets();
+		/*
 		for (int i = 0; i < playerC->bullets.size(); i++)
 		{
 			for (int j = 0; j < hostilesH->spider_ships.size(); j++)
 			{
-				if (playerC->bullets[i].getGlobalBounds().intersects(hostilesH->spider_ships[j]->spider_ship.getGlobalBounds()));
-				std::cout << "test";
+				if (hostilesH->spider_ships[j]->spider_ship.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()));
+				std::cout << "hit "<< std::endl;
 			}
+		}
+		*/
+		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
+		{
+			for (int j = 0; j < hostilesH->spider_ships[i]->bullets.size(); j++)
+			{
+				if (hostilesH->spider_ships[i]->bullets[j].getGlobalBounds().intersects(playerC->player_sprite.getGlobalBounds()));
+				std::cout << "hitF " << std::endl;
+			}
+		}
+
+		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
+		{
+			if (playerC->player_sprite.getGlobalBounds().intersects(hostilesH->spider_ships[i]->spider_ship.getGlobalBounds()))
+				std::cout << "Game Over" << std::endl;
 		}
 	}
 };

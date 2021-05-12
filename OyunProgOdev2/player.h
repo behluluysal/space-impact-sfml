@@ -8,15 +8,20 @@ class player
 {
 public:
 	int anim;
+	
 	sf::Sprite player_sprite;
 	sf::Sprite ui_bullets[8];
-	std::vector<sf::Sprite> bullets;
+	sf::Texture bullet;
 	int x_val;
 	int y_val;
+
+	sf::Sprite bul;
+	std::vector<sf::Sprite> bullets;
 	int bullet_count;
+	
 	int hp;
 	sf::Texture playerTextures[8];
-	sf::Texture bullet;
+	
 	player()
 	{
 		x_val = 175;
@@ -70,9 +75,8 @@ public:
 	{
 		if (bullet_count > 0)
 		{
-			sf::Sprite bul;
-			bul.setScale(0.3f, 0.3f);
 			bul.setTexture(bullet);
+			bul.setScale(0.3f, 0.3f);
 			bul.setPosition(x_val + 19.0f, y_val + 6);
 			bullets.push_back(bul);
 			bullet_count--;
@@ -82,7 +86,7 @@ public:
 	{
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			bullets[i].setPosition(bullets[i].getPosition().x , bullets[i].getPosition().y - 3);
+			bullets[i].setPosition(bullets[i].getPosition().x, bullets[i].getPosition().y - 3);
 			if (bullets[i].getPosition().y <= 2)
 			{
 				bullets.erase(bullets.begin() + i);

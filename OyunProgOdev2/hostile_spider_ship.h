@@ -39,6 +39,7 @@ public:
 		else
 			anim = 0;
 		spider_ship.setTexture(spider_ship_textures[anim]);
+		
 		//391 = 391 texture width height,
 		// 391/100 =3,91 and 50/3,91 = 12,78
 		spider_ship.setPosition(x_val, y_val);
