@@ -1,12 +1,16 @@
 #pragma once
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <vector>
+
+
 class player
 {
 public:
 	int anim;
 	sf::Sprite player_sprite;
 	sf::Sprite ui_bullets[8];
+	std::vector<sf::Sprite> bullets;
 	int x_val;
 	int y_val;
 	int bullet_count;
@@ -64,7 +68,19 @@ public:
 	}
 	void shoot()
 	{
+		sf::Sprite bul;
+		bul.setScale(0.3f, 0.3f);
+		bul.setTexture(bullet);
+		bul.setPosition(x_val+21.0f, y_val+6);
+		bullets.push_back(bul);
 		bullet_count--;
+	}
+	void bullets_move()
+	{
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			bullets[i].setPosition(bullets[i].getPosition().x , bullets[i].getPosition().y - 6);
+		}
 	}
 };
 

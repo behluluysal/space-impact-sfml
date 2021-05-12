@@ -45,11 +45,11 @@ int main()
             {
                 player_sprite->rightMove();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
                 player_sprite->leftMove();
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
                 if (first_shoot)
                 {
@@ -60,7 +60,7 @@ int main()
                 else
                 {
                     gecenSure_shoot += clock_shoot.restart();
-                    if (gecenSure_shoot.asSeconds() > 2)
+                    if (gecenSure_shoot.asSeconds() > 1)
                     {
                         player_sprite->shoot();
                         gecenSure_shoot -= gecenSure_shoot;
@@ -72,6 +72,7 @@ int main()
 
 
             player_sprite->animController();
+            player_sprite->bullets_move();
             window.clear(sf::Color::White);
 
             window.draw(player_sprite->player_sprite);
@@ -81,6 +82,10 @@ int main()
             for (int i = 0; i < player_sprite->bullet_count; i++)
             {
                 window.draw(player_sprite->ui_bullets[i]);
+            }
+            for (int i = 0; i < player_sprite->bullets.size(); i++)
+            {
+                window.draw(player_sprite->bullets[i]);
             }
             window.display();
             gecenSure -= gecenSure;
