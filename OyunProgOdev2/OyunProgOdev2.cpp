@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "player.h"
+#include "game_manager.h"
 
 int _width = 400;
 int _height = 750;
@@ -14,8 +14,7 @@ int main()
 {
     
    
-   
-    player* player_sprite = new player();
+    game_manager* game_managerG = new game_manager();
 
     sf::RectangleShape rectShape({ 400, 50 });
     rectShape.setFillColor(sf::Color::Green);
@@ -43,17 +42,17 @@ int main()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             {
-                player_sprite->rightMove();
+                game_managerG->playerC->rightMove();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             {
-                player_sprite->leftMove();
+                game_managerG->playerC->leftMove();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
                 if (first_shoot)
                 {
-                    player_sprite->shoot();
+                    game_managerG->playerC->shoot();
                     clock_shoot.restart();
                     first_shoot = false;
                 }
@@ -62,7 +61,7 @@ int main()
                     gecenSure_shoot += clock_shoot.restart();
                     if (gecenSure_shoot.asSeconds() > 1)
                     {
-                        player_sprite->shoot();
+                        game_managerG->playerC->shoot();
                         gecenSure_shoot -= gecenSure_shoot;
                     }
                 }
@@ -71,21 +70,21 @@ int main()
             }
 
 
-            player_sprite->animController();
-            player_sprite->bullets_move();
+            game_managerG->playerC->animController();
+            game_managerG->playerC->bullets_move();
             window.clear(sf::Color::White);
 
-            window.draw(player_sprite->player_sprite);
+            window.draw(game_managerG->playerC->player_sprite);
             window.draw(rectShape);
 
             
-            for (int i = 0; i < player_sprite->bullet_count; i++)
+            for (int i = 0; i < game_managerG->playerC->bullet_count; i++)
             {
-                window.draw(player_sprite->ui_bullets[i]);
+                window.draw(game_managerG->playerC->ui_bullets[i]);
             }
-            for (int i = 0; i < player_sprite->bullets.size(); i++)
+            for (int i = 0; i < game_managerG->playerC->bullets.size(); i++)
             {
-                window.draw(player_sprite->bullets[i]);
+                window.draw(game_managerG->playerC->bullets[i]);
             }
             window.display();
             gecenSure -= gecenSure;

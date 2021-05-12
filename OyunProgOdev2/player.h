@@ -22,7 +22,7 @@ public:
 		x_val = 175;
 		y_val = 650;
 		anim = 0;
-		bullet_count = 8;
+		bullet_count = 3;
 		hp = 3;
 		playerTextures[0].loadFromFile("resimler/uzay/user/1.png", { 26, 26, 448, 448 });
 		playerTextures[1].loadFromFile("resimler/uzay/user/2.png", { 26, 26, 448, 448 });
@@ -32,6 +32,7 @@ public:
 		playerTextures[5].loadFromFile("resimler/uzay/user/6.png", { 26, 26, 448, 448 });
 		playerTextures[6].loadFromFile("resimler/uzay/user/7.png", { 26, 26, 448, 448 });
 		playerTextures[7].loadFromFile("resimler/uzay/user/8.png", { 26, 26, 448, 448 });
+		player_sprite.setScale(0.1116f, 0.1116f);
 
 		bullet.loadFromFile("resimler/uzay/bullet.png", { 46, 26, 36, 66 });
 
@@ -51,9 +52,8 @@ public:
 		else
 			anim = 0;
 		player_sprite.setTexture(playerTextures[anim]);
-		//448-46 = 422 texture width height,
-		// 422/100 = 4,22 and 50/4,22 = 11,84
-		player_sprite.setScale(0.1184f,0.1184f);
+		//448 texture width height,
+		// 448/100 = 4,48 and 50/4,48 = 11,16
 		player_sprite.setPosition(x_val, y_val);
 	}
 	void leftMove()
@@ -68,18 +68,26 @@ public:
 	}
 	void shoot()
 	{
-		sf::Sprite bul;
-		bul.setScale(0.3f, 0.3f);
-		bul.setTexture(bullet);
-		bul.setPosition(x_val+21.0f, y_val+6);
-		bullets.push_back(bul);
-		bullet_count--;
+		if (bullet_count > 0)
+		{
+			sf::Sprite bul;
+			bul.setScale(0.3f, 0.3f);
+			bul.setTexture(bullet);
+			bul.setPosition(x_val + 19.0f, y_val + 6);
+			bullets.push_back(bul);
+			bullet_count--;
+		}
 	}
 	void bullets_move()
 	{
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			bullets[i].setPosition(bullets[i].getPosition().x , bullets[i].getPosition().y - 6);
+			bullets[i].setPosition(bullets[i].getPosition().x , bullets[i].getPosition().y - 3);
+			if (bullets[i].getPosition().y <= 2)
+			{
+				bullets.erase(bullets.begin() + i);
+				bullet_count++;
+			}
 		}
 	}
 };
