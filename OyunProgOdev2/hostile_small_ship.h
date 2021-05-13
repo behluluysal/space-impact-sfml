@@ -13,15 +13,15 @@ public:
 	sf::Texture bullet;
 	int bullet_count;
 	std::vector<sf::Sprite> bullets;
-	bool lock_on_target;
+	bool isDestroyed;
 
 	hostile_small_ship()
 	{
-		lock_on_target = true;
+		isDestroyed = false;
 		anim = 0;
 		y_val = 50;
-		x_val = rand() % 350;
-		bullet_count = 2;
+		x_val = rand()% (350 - 50 + 1) + 50;
+		bullet_count = 1;
 		small_ship_textures[0].loadFromFile("resimler/uzay/smallship/1.png", { 71, 23, 483, 528 });
 		small_ship_textures[1].loadFromFile("resimler/uzay/smallship/2.png", { 71, 23, 483, 528 });
 		small_ship_textures[2].loadFromFile("resimler/uzay/smallship/3.png", { 71, 23, 483, 528 });
@@ -36,7 +36,7 @@ public:
 
 	void animController()
 	{
-		if (anim != 3)
+		if (anim != 4)
 			anim++;
 		else
 			anim = 0;
@@ -47,36 +47,25 @@ public:
 		small_ship.setPosition(x_val, y_val);
 
 	}
-	void move(int player_x)
+	void move()
 	{
-		player_x += 50;
-
 		y_val += 1;
-		if (bullet_count == 2)
+		if ((y_val >= 0 && y_val <= 500 && bullet_count == 1))
 		{
 			shoot();
 		}
 	}
 	void shoot()
 	{
-		if (bullet_count == 2)
+		if (bullet_count == 1)
 		{
 			sf::Sprite bul;
 			bul.setScale(0.3f, 0.3f);
 			bul.setTexture(bullet);
-			bul.setPosition(x_val - 18.0f, y_val - 6);
+			bul.setPosition(x_val - 25.0f, y_val - 6);
 			bul.setRotation(180.0f);
 			bullets.push_back(bul);
 			bullet_count--;
-
-			sf::Sprite bul2;
-			bul2.setScale(0.3f, 0.3f);
-			bul2.setTexture(bullet);
-			bul2.setPosition(x_val - 18.0f, y_val - 70);
-			bul2.setRotation(180.0f);
-			bullets.push_back(bul2);
-			bullet_count--;
-			lock_on_target = false;
 		}
 		else
 			return;
@@ -85,13 +74,11 @@ public:
 	{
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			bullets[i].setPosition(bullets[i].getPosition().x, bullets[i].getPosition().y + 3);
+			bullets[i].setPosition(bullets[i].getPosition().x, bullets[i].getPosition().y + 2);
 			if (bullets[i].getPosition().y >= 700)
 			{
 				bullets.erase(bullets.begin() + i);
 				bullet_count++;
-				if (bullet_count == 2)
-					lock_on_target = true;
 			}
 		}
 	}

@@ -22,7 +22,7 @@ public:
 		isDestroyed = false;
 		anim = 0;
 		y_val = 50;
-		x_val = rand() % 350;
+		x_val = rand() % (350 - 50 + 1) + 50;
 		bullet_count = 2;
 		spider_ship_textures[0].loadFromFile("resimler/uzay/yarasaucak/1.png", { 63, 57, 381, 391 });
 		spider_ship_textures[1].loadFromFile("resimler/uzay/yarasaucak/2.png", { 63, 57, 381, 391 });

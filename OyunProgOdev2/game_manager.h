@@ -47,33 +47,95 @@ public:
 
 	void spawner()
 	{
-		hostilesH->spawn_spider_ship();
+		hostilesH->spawn_hostile_ship();
 	}
 	bool mover(bool game_status)
 	{
 		hostilesH->move_spider_ships(playerC->player_sprite.getPosition().x);
 		hostilesH->move_spider_ship_bullets();
-		
+
+		hostilesH->move_small_ships();
+		hostilesH->move_small_ship_bullets();
+
+		hostilesH->move_space_mines();
+
+		hostilesH->move_hostile_comms();
+
 		//remove destroyed spiderships
 		for (int j = 0; j < hostilesH->spider_ships.size(); j++)
 		{
 			if(hostilesH->spider_ships[j]->isDestroyed && hostilesH->spider_ships[j]->bullet_count == 2)
 				hostilesH->spider_ships.erase(hostilesH->spider_ships.begin() + j);
 		}
+		//remove destroyed smallships
+		for (int j = 0; j < hostilesH->small_ships.size(); j++)
+		{
+			if (hostilesH->small_ships[j]->isDestroyed && hostilesH->small_ships[j]->bullet_count == 1)
+				hostilesH->small_ships.erase(hostilesH->small_ships.begin() + j);
+		}
+
 		//blue bullet hits spider ship
 		for (int i = 0; i < playerC->bullets.size(); i++)
 		{
 			for (int j = 0; j < hostilesH->spider_ships.size(); j++)
 			{
-				if (hostilesH->spider_ships[j]->spider_ship.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()))
+				if (hostilesH->spider_ships[j]->spider_ship.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()) && !hostilesH->spider_ships[j]->isDestroyed)
 				{
 					add_explosion(hostilesH->spider_ships[j]->spider_ship.getPosition(), hostilesH->spider_ships[j]->spider_ship.getRotation());
 					hostilesH->spider_ships[j]->isDestroyed = true;
 					playerC->bullets.erase(playerC->bullets.begin() + i);
 					playerC->bullet_count++;
+					break;
 				}
 			}
 		}
+		//blue bullet hits small ship
+		for (int i = 0; i < playerC->bullets.size(); i++)
+		{
+			for (int j = 0; j < hostilesH->small_ships.size(); j++)
+			{
+				if (hostilesH->small_ships[j]->small_ship.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()) && !hostilesH->small_ships[j]->isDestroyed)
+				{
+					add_explosion(hostilesH->small_ships[j]->small_ship.getPosition(), hostilesH->small_ships[j]->small_ship.getRotation());
+					hostilesH->small_ships[j]->isDestroyed = true;
+					playerC->bullets.erase(playerC->bullets.begin() + i);
+					playerC->bullet_count++;
+					break;
+				}
+			}
+		}
+		//blue bullet hits space mine
+		for (int i = 0; i < playerC->bullets.size(); i++)
+		{
+			for (int j = 0; j < hostilesH->space_mine.size(); j++)
+			{
+				if (hostilesH->space_mine[j]->space_mine.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()))
+				{
+					add_explosion(hostilesH->space_mine[j]->space_mine.getPosition(), hostilesH->space_mine[j]->space_mine.getRotation());
+					hostilesH->space_mine.erase(hostilesH->space_mine.begin() + j);
+					playerC->bullets.erase(playerC->bullets.begin() + i);
+					playerC->bullet_count++;
+					break;
+				}
+			}
+		}
+
+		//blue bullet hits space comm
+		for (int i = 0; i < playerC->bullets.size(); i++)
+		{
+			for (int j = 0; j < hostilesH->space_comms.size(); j++)
+			{
+				if (hostilesH->space_comms[j]->space_comm.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()))
+				{
+					add_explosion(hostilesH->space_comms[j]->space_comm.getPosition(), hostilesH->space_comms[j]->space_comm.getRotation());
+					hostilesH->space_comms.erase(hostilesH->space_comms.begin() + j);
+					playerC->bullets.erase(playerC->bullets.begin() + i);
+					playerC->bullet_count++;
+					break;
+				}
+			}
+		}
+
 
 		//spidership hits ground
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
@@ -85,8 +147,39 @@ public:
 				break;
 			}
 		}
+		//smallship hits ground
+		for (int i = 0; i < hostilesH->small_ships.size(); i++)
+		{
+			if (hostilesH->small_ships[i]->small_ship.getPosition().y >= 700)
+			{
+				add_explosion(hostilesH->small_ships[i]->small_ship.getPosition(), hostilesH->small_ships[i]->small_ship.getRotation());
+				hostilesH->small_ships.erase(hostilesH->small_ships.begin() + i);
+				break;
+			}
+		}
+		//space mine hits ground
+		for (int i = 0; i < hostilesH->space_mine.size(); i++)
+		{
+			if (hostilesH->space_mine[i]->space_mine.getPosition().y >= 650)
+			{
+				add_explosion(hostilesH->space_mine[i]->space_mine.getPosition(), hostilesH->space_mine[i]->space_mine.getRotation());
+				hostilesH->space_mine.erase(hostilesH->space_mine.begin() + i);
+				break;
+			}
+		}
+		//space comm hits ground
+		for (int i = 0; i < hostilesH->space_comms.size(); i++)
+		{
+			if (hostilesH->space_comms[i]->space_comm.getPosition().y >= 650)
+			{
+				add_explosion(hostilesH->space_comms[i]->space_comm.getPosition(), hostilesH->space_comms[i]->space_comm.getRotation());
+				hostilesH->space_comms.erase(hostilesH->space_comms.begin() + i);
+				break;
+			}
+		}
+
 		
-		//spidership bullet hits player
+		//red bullet hits player spidership
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
 		{
 			for (int j = 0; j < hostilesH->spider_ships[i]->bullets.size(); j++)
@@ -95,6 +188,19 @@ public:
 				{
 					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
 					hostilesH->spider_ships[i]->bullets.erase(hostilesH->spider_ships[i]->bullets.begin() + j);
+					return false;
+				}
+			}
+		}
+		//red bullet hits player smallship
+		for (int i = 0; i < hostilesH->small_ships.size(); i++)
+		{
+			for (int j = 0; j < hostilesH->small_ships[i]->bullets.size(); j++)
+			{
+				if (hostilesH->small_ships[i]->bullets[j].getGlobalBounds().intersects(playerC->player_sprite.getGlobalBounds()))
+				{
+					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+					hostilesH->small_ships[i]->bullets.erase(hostilesH->small_ships[i]->bullets.begin() + j);
 					return false;
 				}
 			}
@@ -112,9 +218,42 @@ public:
 				return false;
 			}
 		}
-
-
-
+		//smallship hits player
+		if (game_status)
+			for (int i = 0; i < hostilesH->small_ships.size(); i++)
+			{
+				if (playerC->player_sprite.getGlobalBounds().intersects(hostilesH->small_ships[i]->small_ship.getGlobalBounds()))
+				{
+					add_explosion(hostilesH->small_ships[i]->small_ship.getPosition(), hostilesH->small_ships[i]->small_ship.getRotation());
+					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+					hostilesH->small_ships.erase(hostilesH->small_ships.begin() + i);
+					return false;
+				}
+			}
+		//space mine hits player
+		if (game_status)
+			for (int i = 0; i < hostilesH->space_mine.size(); i++)
+			{
+				if (playerC->player_sprite.getGlobalBounds().intersects(hostilesH->space_mine[i]->space_mine.getGlobalBounds()))
+				{
+					add_explosion(hostilesH->space_mine[i]->space_mine.getPosition(), hostilesH->space_mine[i]->space_mine.getRotation());
+					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+					hostilesH->space_mine.erase(hostilesH->space_mine.begin() + i);
+					return false;
+				}
+			}
+		//space comm hits player
+		if (game_status)
+			for (int i = 0; i < hostilesH->space_comms.size(); i++)
+			{
+				if (playerC->player_sprite.getGlobalBounds().intersects(hostilesH->space_comms[i]->space_comm.getGlobalBounds()))
+				{
+					add_explosion(hostilesH->space_comms[i]->space_comm.getPosition(), hostilesH->space_comms[i]->space_comm.getRotation());
+					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+					hostilesH->space_comms.erase(hostilesH->space_comms.begin() + i);
+					return false;
+				}
+			}
 
 
 		return game_status;

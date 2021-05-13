@@ -43,35 +43,38 @@ int main()
 
         if (gecenSure.asSeconds() >= cerceveSuresi) 
         {
-            if (game_status)
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && game_status)
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                game_managerG->playerC->rightMove();
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && game_status)
+            {
+                game_managerG->playerC->leftMove();
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && game_status)
+            {
+                if (first_shoot)
                 {
-                    game_managerG->playerC->rightMove();
+                    game_managerG->playerC->shoot();
+                    clock_shoot.restart();
+                    first_shoot = false;
                 }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                else
                 {
-                    game_managerG->playerC->leftMove();
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-                {
-                    if (first_shoot)
+                    gecenSure_shoot += clock_shoot.restart();
+                    if (gecenSure_shoot.asSeconds() > 0.5f)
                     {
                         game_managerG->playerC->shoot();
-                        clock_shoot.restart();
-                        first_shoot = false;
-                    }
-                    else
-                    {
-                        gecenSure_shoot += clock_shoot.restart();
-                        if (gecenSure_shoot.asSeconds() > 1)
-                        {
-                            game_managerG->playerC->shoot();
-                            gecenSure_shoot -= gecenSure_shoot;
-                        }
+                        gecenSure_shoot -= gecenSure_shoot;
                     }
                 }
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !game_status)
+            {
+                game_managerG = new game_manager();
+                game_status = true;
+            }
+
            
 
             gecenSure_spawn += clock_spawn.restart();
@@ -110,11 +113,32 @@ int main()
                 if(!game_managerG->hostilesH->spider_ships[i]->isDestroyed)
                     window.draw(game_managerG->hostilesH->spider_ships[i]->spider_ship);
             }   
+            for (int i = 0; i < game_managerG->hostilesH->small_ships.size(); i++)
+            {
+                if (!game_managerG->hostilesH->small_ships[i]->isDestroyed)
+                    window.draw(game_managerG->hostilesH->small_ships[i]->small_ship);
+            }
+            for (int i = 0; i < game_managerG->hostilesH->space_mine.size(); i++)
+            {
+                window.draw(game_managerG->hostilesH->space_mine[i]->space_mine);
+            }
+            
+            for (int i = 0; i < game_managerG->hostilesH->space_comms.size(); i++)
+            {
+                window.draw(game_managerG->hostilesH->space_comms[i]->space_comm);
+            }
+
             for (int i = 0; i < game_managerG->hostilesH->spider_ships.size(); i++)
             {
                 for(int j = 0; j< game_managerG->hostilesH->spider_ships[i]->bullets.size();j++)
                     if(game_managerG->hostilesH->spider_ships[i]->bullets[j].getPosition().y > game_managerG->hostilesH->spider_ships[i]->spider_ship.getPosition().y+10)
                         window.draw(game_managerG->hostilesH->spider_ships[i]->bullets[j]);
+            }
+            for (int i = 0; i < game_managerG->hostilesH->small_ships.size(); i++)
+            {
+                for (int j = 0; j < game_managerG->hostilesH->small_ships[i]->bullets.size(); j++)
+                    if (game_managerG->hostilesH->small_ships[i]->bullets[j].getPosition().y > game_managerG->hostilesH->small_ships[i]->small_ship.getPosition().y + 10)
+                        window.draw(game_managerG->hostilesH->small_ships[i]->bullets[j]);
             }
             window.display();
             gecenSure -= gecenSure;

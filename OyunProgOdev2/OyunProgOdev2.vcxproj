@@ -153,12 +153,13 @@
     <ClCompile Include="OyunProgOdev2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="enemy_bullets.h" />
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="hostiles.h" />
+    <ClInclude Include="hostile_comm.h" />
     <ClInclude Include="hostile_small_ship.h" />
     <ClInclude Include="hostile_spider_ship.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="space_mines.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
