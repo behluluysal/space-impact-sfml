@@ -30,6 +30,7 @@ public:
 		spider_ship.setScale(0.1278f, 0.1278f);
 		spider_ship.setRotation(180.0f);
 		bullet.loadFromFile("resimler/uzay/bullet_red.png", { 46, 26, 36, 66 });
+
 	}
 
 	void animController()
