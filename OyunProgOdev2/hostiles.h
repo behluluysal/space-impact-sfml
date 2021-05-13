@@ -1,5 +1,6 @@
 #pragma once
 #include "hostile_spider_ship.h"
+#include "hostile_small_ship.h"
 #include <vector>
 
 class hostiles
@@ -10,7 +11,7 @@ public:
 
 	hostiles()
 	{
-		public_enemy_number_one_count = 1;
+		public_enemy_number_one_count = 2;
 	}
 
 	void spawn_spider_ship()

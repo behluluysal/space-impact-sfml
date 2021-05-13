@@ -32,5 +32,8 @@
     <ClInclude Include="hostiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hostile_small_ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

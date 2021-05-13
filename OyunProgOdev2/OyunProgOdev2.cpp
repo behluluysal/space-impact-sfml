@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "game_manager.h"
+#include <time.h>
 
 int _width = 400;
 int _height = 750;
@@ -12,6 +13,7 @@ float cerceveSuresi = 1.0f / 60.0f;
 
 int main()
 {
+    srand(time(0));
     game_manager* game_managerG = new game_manager();
 
     sf::RectangleShape rectShape({ 400, 50 });
@@ -21,8 +23,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode(_width, _height), "Space Impact");
     sf::Clock clock;
     sf::Clock clock_shoot;
+    sf::Clock clock_spawn;
     sf::Time gecenSure;
     sf::Time gecenSure_shoot;
+    sf::Time gecenSure_spawn;
     bool first_shoot = true;
     window.setFramerateLimit(60);
     while (window.isOpen())
@@ -36,6 +40,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         if (gecenSure.asSeconds() >= cerceveSuresi) 
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -67,7 +72,13 @@ int main()
                    
             }
 
-            game_managerG->spawner();
+            gecenSure_spawn += clock_spawn.restart();
+            if (gecenSure_spawn.asSeconds() > 1)
+            {
+                game_managerG->spawner();
+                gecenSure_spawn -= gecenSure_spawn;
+            }
+            
             game_managerG->mover();
 
             game_managerG->playerC->animController();

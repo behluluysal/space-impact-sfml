@@ -86,7 +86,7 @@ public:
 	{
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			bullets[i].setPosition(bullets[i].getPosition().x, bullets[i].getPosition().y - 3);
+			bullets[i].setPosition(bullets[i].getPosition().x, bullets[i].getPosition().y - 10);
 			if (bullets[i].getPosition().y <= 2)
 			{
 				bullets.erase(bullets.begin() + i);

@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="hostiles.h" />
+    <ClInclude Include="hostile_small_ship.h" />
     <ClInclude Include="hostile_spider_ship.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
