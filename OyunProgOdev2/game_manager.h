@@ -18,6 +18,7 @@ public:
 		int anim;
 		sf::Sprite sprite;
 	};
+
 	std::vector<explosion> explosions;
 
 	game_manager()
@@ -61,13 +62,18 @@ public:
 				std::cout << "hit "<< std::endl;
 			}
 		}
-		
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
 		{
 			if (hostilesH->spider_ships[i]->spider_ship.getPosition().y >= 700)
 			{
-				add_explosion(hostilesH->spider_ships[i]->spider_ship.getTransform());
+				add_explosion(hostilesH->spider_ships[i]->spider_ship.getPosition(), hostilesH->spider_ships[i]->spider_ship.getRotation());
+				hostilesH->spider_ships.erase(hostilesH->spider_ships.begin() + i);
+				break;
 			}
+		}
+		
+		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
+		{
 			for (int j = 0; j < hostilesH->spider_ships[i]->bullets.size(); j++)
 			{
 				if (hostilesH->spider_ships[i]->bullets[j].getGlobalBounds().intersects(playerC->player_sprite.getGlobalBounds()))
@@ -82,9 +88,28 @@ public:
 		}
 	}
 
-	void add_explosion(sf::Transform t)
+	void explosion_anims()
 	{
+		for (int i = 0; i < explosions.size(); i++)
+		{
+			if (explosions[i].anim == 17)
+			{
+				explosions.erase(explosions.begin() + i);
+			}
+			else
+				explosions[i].sprite.setTexture(explosion_textures[explosions[i].anim++]);
+		}
+	}
 
+	void add_explosion(sf::Vector2f t,float x)
+	{
+		explosion exp;
+		exp.anim = 0;
+		exp.sprite.setTexture(explosion_textures[exp.anim]);
+		exp.sprite.setPosition(t);
+		exp.sprite.setRotation(x);
+		exp.sprite.setScale(0.5f,0.5f);
+		explosions.push_back(exp);
 	}
 };
 

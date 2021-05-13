@@ -80,7 +80,7 @@ int main()
             }
             
             game_managerG->mover();
-
+            game_managerG->explosion_anims();
             game_managerG->playerC->animController();
             game_managerG->playerC->bullets_move();
             window.clear(sf::Color::White);
@@ -89,6 +89,10 @@ int main()
             window.draw(rectShape);
 
             
+            for (int i = 0; i < game_managerG->explosions.size(); i++)
+            {
+                window.draw(game_managerG->explosions[i].sprite);
+            }
             for (int i = 0; i < game_managerG->playerC->bullet_count; i++)
             {
                 window.draw(game_managerG->playerC->ui_bullets[i]);
