@@ -153,6 +153,7 @@
     <ClCompile Include="OyunProgOdev2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="enemy_bullets.h" />
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="hostiles.h" />
     <ClInclude Include="hostile_small_ship.h" />

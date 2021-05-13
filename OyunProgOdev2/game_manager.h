@@ -49,19 +49,33 @@ public:
 	{
 		hostilesH->spawn_spider_ship();
 	}
-	void mover()
+	bool mover(bool game_status)
 	{
 		hostilesH->move_spider_ships(playerC->player_sprite.getPosition().x);
 		hostilesH->move_spider_ship_bullets();
 		
+		//remove destroyed spiderships
+		for (int j = 0; j < hostilesH->spider_ships.size(); j++)
+		{
+			if(hostilesH->spider_ships[j]->isDestroyed && hostilesH->spider_ships[j]->bullet_count == 2)
+				hostilesH->spider_ships.erase(hostilesH->spider_ships.begin() + j);
+		}
+		//blue bullet hits spider ship
 		for (int i = 0; i < playerC->bullets.size(); i++)
 		{
 			for (int j = 0; j < hostilesH->spider_ships.size(); j++)
 			{
 				if (hostilesH->spider_ships[j]->spider_ship.getGlobalBounds().intersects(playerC->bullets[i].getGlobalBounds()))
-				std::cout << "hit "<< std::endl;
+				{
+					add_explosion(hostilesH->spider_ships[j]->spider_ship.getPosition(), hostilesH->spider_ships[j]->spider_ship.getRotation());
+					hostilesH->spider_ships[j]->isDestroyed = true;
+					playerC->bullets.erase(playerC->bullets.begin() + i);
+					playerC->bullet_count++;
+				}
 			}
 		}
+
+		//spidership hits ground
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
 		{
 			if (hostilesH->spider_ships[i]->spider_ship.getPosition().y >= 700)
@@ -72,20 +86,38 @@ public:
 			}
 		}
 		
+		//spidership bullet hits player
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
 		{
 			for (int j = 0; j < hostilesH->spider_ships[i]->bullets.size(); j++)
 			{
 				if (hostilesH->spider_ships[i]->bullets[j].getGlobalBounds().intersects(playerC->player_sprite.getGlobalBounds()))
-				std::cout << "hitF " << std::endl;
+				{
+					add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+					hostilesH->spider_ships[i]->bullets.erase(hostilesH->spider_ships[i]->bullets.begin() + j);
+					return false;
+				}
 			}
 		}
 		
+		//spidership hits player
+		if(game_status)
 		for (int i = 0; i < hostilesH->spider_ships.size(); i++)
 		{
 			if (playerC->player_sprite.getGlobalBounds().intersects(hostilesH->spider_ships[i]->spider_ship.getGlobalBounds()))
-				std::cout << "Game Over" << std::endl;
+			{
+				add_explosion(hostilesH->spider_ships[i]->spider_ship.getPosition(), hostilesH->spider_ships[i]->spider_ship.getRotation());
+				add_explosion(playerC->player_sprite.getPosition(), playerC->player_sprite.getRotation());
+				hostilesH->spider_ships.erase(hostilesH->spider_ships.begin() + i);
+				return false;
+			}
 		}
+
+
+
+
+
+		return game_status;
 	}
 
 	void explosion_anims()

@@ -8,7 +8,7 @@ int _height = 750;
 float x = 0;
 int _speed = 1000;
 float cerceveSuresi = 1.0f / 60.0f;
-
+bool game_status = true;
 
 
 int main()
@@ -43,49 +43,53 @@ int main()
 
         if (gecenSure.asSeconds() >= cerceveSuresi) 
         {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            if (game_status)
             {
-                game_managerG->playerC->rightMove();
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
-                game_managerG->playerC->leftMove();
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            {
-                if (first_shoot)
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
                 {
-                    game_managerG->playerC->shoot();
-                    clock_shoot.restart();
-                    first_shoot = false;
+                    game_managerG->playerC->rightMove();
                 }
-                else
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
                 {
-                    gecenSure_shoot += clock_shoot.restart();
-                    if (gecenSure_shoot.asSeconds() > 1)
+                    game_managerG->playerC->leftMove();
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                {
+                    if (first_shoot)
                     {
                         game_managerG->playerC->shoot();
-                        gecenSure_shoot -= gecenSure_shoot;
+                        clock_shoot.restart();
+                        first_shoot = false;
+                    }
+                    else
+                    {
+                        gecenSure_shoot += clock_shoot.restart();
+                        if (gecenSure_shoot.asSeconds() > 1)
+                        {
+                            game_managerG->playerC->shoot();
+                            gecenSure_shoot -= gecenSure_shoot;
+                        }
                     }
                 }
-                
-                   
             }
+           
 
             gecenSure_spawn += clock_spawn.restart();
-            if (gecenSure_spawn.asSeconds() > 1)
+            if (gecenSure_spawn.asSeconds() > 1 && game_status)
             {
                 game_managerG->spawner();
                 gecenSure_spawn -= gecenSure_spawn;
             }
             
-            game_managerG->mover();
+            game_status = game_managerG->mover(game_status);
             game_managerG->explosion_anims();
             game_managerG->playerC->animController();
             game_managerG->playerC->bullets_move();
             window.clear(sf::Color::White);
 
-            window.draw(game_managerG->playerC->player_sprite);
+            if(game_status)
+                window.draw(game_managerG->playerC->player_sprite);
+
             window.draw(rectShape);
 
             
@@ -103,8 +107,9 @@ int main()
             }
             for (int i = 0; i < game_managerG->hostilesH->spider_ships.size(); i++)
             {
-                window.draw(game_managerG->hostilesH->spider_ships[i]->spider_ship);
-            }
+                if(!game_managerG->hostilesH->spider_ships[i]->isDestroyed)
+                    window.draw(game_managerG->hostilesH->spider_ships[i]->spider_ship);
+            }   
             for (int i = 0; i < game_managerG->hostilesH->spider_ships.size(); i++)
             {
                 for(int j = 0; j< game_managerG->hostilesH->spider_ships[i]->bullets.size();j++)

@@ -15,11 +15,11 @@ public:
 	sf::Texture bullet;
 	int bullet_count;
 	std::vector<sf::Sprite> bullets;
-	bool lock_on_target;
+	bool isDestroyed;
 
 	hostile_spider_ship()
 	{
-		lock_on_target = true;
+		isDestroyed = false;
 		anim = 0;
 		y_val = 50;
 		x_val = rand() % 350;
@@ -56,7 +56,7 @@ public:
 	}
 	void shoot()
 	{
-		if (bullet_count == 2)
+		if (bullet_count == 2 && !isDestroyed)
 		{
 			sf::Sprite bul;
 			bul.setScale(0.3f, 0.3f);
@@ -73,7 +73,6 @@ public:
 			bul2.setRotation(180.0f);
 			bullets.push_back(bul2);
 			bullet_count--;
-			lock_on_target = false;
 		}
 		else
 			return;
@@ -87,8 +86,6 @@ public:
 			{
 				bullets.erase(bullets.begin() + i);
 				bullet_count++;
-				if (bullet_count == 2)
-					lock_on_target = true;
 			}
 		}
 	}

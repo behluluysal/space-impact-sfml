@@ -35,5 +35,8 @@
     <ClInclude Include="hostile_small_ship.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_bullets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
