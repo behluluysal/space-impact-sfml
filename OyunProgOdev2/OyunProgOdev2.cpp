@@ -64,13 +64,16 @@ int main()
                     gecenSure_shoot += clock_shoot.restart();
                     if (gecenSure_shoot.asSeconds() > 0.5f)
                     {
-                        game_managerG->playerC->shoot();
+                        game_managerG->player_shoot();
                         gecenSure_shoot -= gecenSure_shoot;
                     }
                 }
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !game_status)
             {
+                delete game_managerG->playerC;
+                delete game_managerG->hostilesH;
+                delete game_managerG;
                 game_managerG = new game_manager();
                 game_status = true;
             }

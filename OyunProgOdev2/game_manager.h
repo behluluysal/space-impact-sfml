@@ -61,6 +61,8 @@ public:
 
 		hostilesH->move_hostile_comms();
 
+		hostilesH->spider_ship_escape_manuever();
+
 		//remove destroyed spiderships
 		for (int j = 0; j < hostilesH->spider_ships.size(); j++)
 		{
@@ -259,6 +261,12 @@ public:
 		return game_status;
 	}
 
+	void player_shoot()
+	{
+		playerC->shoot();
+		hostilesH->spider_ships_activate_escape_manuever();
+		
+	}
 	void explosion_anims()
 	{
 		for (int i = 0; i < explosions.size(); i++)

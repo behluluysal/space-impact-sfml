@@ -16,14 +16,22 @@ public:
 	int bullet_count;
 	std::vector<sf::Sprite> bullets;
 	bool isDestroyed;
+	bool lock_on_target;
+	int escape_maneuver_dir;
+	int shot_location;
+	bool escape;
 
 	hostile_spider_ship()
 	{
 		isDestroyed = false;
+		lock_on_target = true;
+		escape = false;
 		anim = 0;
 		y_val = 50;
 		x_val = rand() % (350 - 50 + 1) + 50;
 		bullet_count = 2;
+		escape_maneuver_dir = 0;
+		shot_location = 0;
 		spider_ship_textures[0].loadFromFile("resimler/uzay/yarasaucak/1.png", { 63, 57, 381, 391 });
 		spider_ship_textures[1].loadFromFile("resimler/uzay/yarasaucak/2.png", { 63, 57, 381, 391 });
 		spider_ship_textures[2].loadFromFile("resimler/uzay/yarasaucak/3.png", { 63, 57, 381, 391 });
@@ -51,8 +59,75 @@ public:
 		player_x += 50;
 		
 		y_val += 1;
-		if ((y_val >= 50 && y_val <= 400 && bullet_count == 2))
-			shoot();
+
+
+		if (lock_on_target)
+		{
+			if (x_val <= player_x)
+			{
+				if (player_x - x_val >= 3)
+				{
+					if (y_val < 500)
+						x_val += 2;
+					if ((player_x - x_val <= 6) && (y_val <= 500))
+					{
+						int rands = rand() % 10;
+						if (rands < 5)
+							escape_maneuver_dir = 1;
+						else
+							escape_maneuver_dir = -1;
+						shot_location = x_val;
+						shoot();
+					}
+						
+				}
+			}
+			else if (x_val > player_x)
+			{
+				if (x_val - player_x > 3)
+				{
+					if (y_val < 400)
+						x_val -= 2;
+					if ((x_val - player_x <= 6) && (y_val <= 500))
+					{
+						int rands = rand() % 10;
+						if(rands<5)
+							escape_maneuver_dir = 1;
+						else
+							escape_maneuver_dir = -1;
+						shot_location = x_val;
+						shoot();
+					}
+				}
+			}
+		}
+
+		if (escape == true)
+		{
+			if (escape_maneuver_dir == 1)
+			{
+				if (x_val - shot_location <= 50)
+					x_val += 2;
+				else
+					escape = false;
+			}
+			else if (escape_maneuver_dir == -1)
+			{
+				if (shot_location - x_val <= 50)
+					x_val -= 2;
+				else
+					escape = false;
+			}
+		}
+
+	}
+	void activate_escape_manuever()
+	{
+		escape = true;
+	}
+	void escape_manuever() 
+	{
+		
 	}
 	void shoot()
 	{
@@ -73,6 +148,7 @@ public:
 			bul2.setRotation(180.0f);
 			bullets.push_back(bul2);
 			bullet_count--;
+			lock_on_target = false;
 		}
 		else
 			return;
@@ -86,6 +162,8 @@ public:
 			{
 				bullets.erase(bullets.begin() + i);
 				bullet_count++;
+				if (bullet_count == 2)
+					lock_on_target = true;
 			}
 		}
 	}

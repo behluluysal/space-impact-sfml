@@ -67,8 +67,22 @@ public:
 				space_comms.push_back(hss);
 			}
 		}
-		std::cout << x << std::endl;
 		
+	}
+	void spider_ships_activate_escape_manuever()
+	{
+		for (int i = 0; i < spider_ships.size(); i++)
+		{
+			if(spider_ships[i]->lock_on_target == false)
+				spider_ships[i]->activate_escape_manuever();
+		}
+	}
+	void spider_ship_escape_manuever()
+	{
+		for (int i = 0; i < spider_ships.size(); i++)
+		{
+			spider_ships[i]->escape_manuever();
+		}
 	}
 	void move_spider_ships(int player_x)
 	{

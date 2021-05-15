@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
+#include <iostream>
 
 
 class player
@@ -14,7 +15,8 @@ public:
 	sf::Texture bullet;
 	int x_val;
 	int y_val;
-
+	int yon;// for animation move 1-8 to 8-1
+	bool flag; // animation first run
 	sf::Sprite bul;
 	std::vector<sf::Sprite> bullets;
 	int bullet_count;
@@ -29,6 +31,8 @@ public:
 		anim = 0;
 		bullet_count = 3;
 		hp = 3;
+		flag = true;
+		
 		playerTextures[0].loadFromFile("resimler/uzay/user/1.png", { 26, 26, 448, 448 });
 		playerTextures[1].loadFromFile("resimler/uzay/user/2.png", { 26, 26, 448, 448 });
 		playerTextures[2].loadFromFile("resimler/uzay/user/3.png", { 26, 26, 448, 448 });
@@ -38,7 +42,7 @@ public:
 		playerTextures[6].loadFromFile("resimler/uzay/user/7.png", { 26, 26, 448, 448 });
 		playerTextures[7].loadFromFile("resimler/uzay/user/8.png", { 26, 26, 448, 448 });
 		player_sprite.setScale(0.1116f, 0.1116f);
-
+		yon = 1;
 		bullet.loadFromFile("resimler/uzay/bullet.png", { 46, 26, 36, 66 });
 
 		int ui_bullet_pos = 260;
@@ -52,11 +56,26 @@ public:
 	}
 	void animController()
 	{
-		if (anim != 7)
-			anim++;
-		else
-			anim = 0;
 		player_sprite.setTexture(playerTextures[anim]);
+		//std::cout << anim<<std::endl;
+		if (flag == false)
+		{
+			if (anim == 8 || anim == 0)
+			{
+				yon *= -1;
+				anim += yon;
+			}
+			else
+				anim += yon;
+		}
+		else
+		{
+			flag = false;
+			anim++;
+		}
+			
+		
+		
 		//448 texture width height,
 		// 448/100 = 4,48 and 50/4,48 = 11,16
 		player_sprite.setPosition(x_val, y_val);
