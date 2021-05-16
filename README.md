@@ -15,12 +15,13 @@ Added:
 - Spider ships can decide to make an escape manuever to right or left. Possibilty is %50, %50
 
 Note: If game is not working or can't find resource files; follow these steps:
--1) click on project name(at solution explorer) "OyunProgOdev2
--2) Go to View(At menu bar)
--3) Go to Property Pages
--4) On pop-up screen, Configuration Properties->Debugging->Working Directory
--5) Add "$(SolutionDir)..\Dependencies\bin\" to Working Directory
--6) Have fun!
+
+- 1. click on project name(at solution explorer) "OyunProgOdev2"
+- 2. Go to View(At menu bar)
+- 3. Go to Property Pages
+- 4. On pop-up screen, Configuration Properties->Debugging->Working Directory
+- 5. Add "$(SolutionDir)..\Dependencies\bin\" to Working Directory
+- 6. Have fun!
 
 Known Bugs:
 
@@ -29,6 +30,6 @@ Known Bugs:
 
 Group Members:
 
--           Yasin DERE
--           Emre MUTLU
+- g171210380 Yasin DERE
+- g161210053 Emre MUTLU
 - g171210080 Süleyman Behlül UYSAL
